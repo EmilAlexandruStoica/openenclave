@@ -174,6 +174,8 @@ if (UNIX)
   target_compile_options(oehost PRIVATE
     -Wno-attributes -Wmissing-prototypes -fPIC ${PLATFORM_FLAGS})
   target_compile_definitions(oehost PRIVATE _GNU_SOURCE)
+  target_compile_options(oehost PUBLIC -fstack-protector-strong)
+  target_compile_definitions(oehost PUBLIC _FORTIFY_SOURCE=2)
 endif ()
 
 if (CMAKE_C_COMPILER_ID MATCHES GNU)
@@ -191,7 +193,9 @@ add_library(oehostapp INTERFACE)
 target_link_libraries(oehostapp INTERFACE oehost)
 
 if (UNIX)
-  target_link_libraries(oehostapp INTERFACE -rdynamic)
+  target_link_libraries(oehostapp INTERFACE
+      -rdynamic
+      -Wl,-z,noexecstack)
 endif ()
 
 # Install targets

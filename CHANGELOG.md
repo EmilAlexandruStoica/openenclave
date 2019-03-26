@@ -69,6 +69,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
      - `--config-file [-c]`, the path of the config file with enclave properties
      - `--key-file [-k]`, the path of the private key file used to digitally sign the enclave image
    - The `dump` subcommand accepts only the `--enclave-image [-e]` mandatory flag, for the enclave file path.
+- Update pkg-config and cmake exports to include the following hardening build
+  flags by default:
+    - Enclaves will:
+       - Compile with `-fPIE` instead of `-fPIC`.
+       - Link with `-Wl,-z,noexecstack`, `-Wl,-z,now`.
+    - Host apps will:
+       - Compile with `-D_FORTIFY_SOURCE=2` (only effective if compiling under
+         GCC with `-O2` specified) and `-fstack-protector-strong`.
+       - Link with `-Wl,-z,noexecstack`.
+       - Note that `-Wl,-z,now` is _not_ enabled by default, but app authors
+         should enable it themselves after assessing its startup impact.
 
 ### Deprecated
 

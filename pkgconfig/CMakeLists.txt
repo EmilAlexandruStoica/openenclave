@@ -42,6 +42,8 @@ string(APPEND ENCLAVE_CLIBS_1 "-Wl,-Bsymbolic ")
 string(APPEND ENCLAVE_CLIBS_1 "-Wl,--export-dynamic ")
 string(APPEND ENCLAVE_CLIBS_1 "-Wl,-pie ")
 string(APPEND ENCLAVE_CLIBS_1 "-Wl,--build-id ")
+string(APPEND ENCLAVE_CLIBS_1 "-Wl,-z,noexecstack ")
+string(APPEND ENCLAVE_CLIBS_1 "-Wl,-z,now ")
 string(APPEND ENCLAVE_CLIBS_1 "-L\${libdir}/openenclave/enclave ")
 string(APPEND ENCLAVE_CLIBS_1 "-loeenclave ")
 string(APPEND ENCLAVE_CLIBS_1 "-lmbedx509 ")
@@ -62,11 +64,11 @@ set(ENCLAVE_CXXLIBS "${ENCLAVE_CLIBS_1} -loelibcxx ${ENCLAVE_CLIBS_2}")
 
 set(HOST_INCLUDES "-I\${includedir}")
 
-set(HOST_CFLAGS_CLANG "-mllvm -x86-speculative-load-hardening")
+set(HOST_CFLAGS_CLANG "-fstack-protector-strong -mllvm -x86-speculative-load-hardening")
 
 set(HOST_CXXFLAGS_CLANG "${HOST_CFLAGS_CLANG}")
 
-set(HOST_CFLAGS_GCC "")
+set(HOST_CFLAGS_GCC "-fstack-protector-strong -D_FORTIFY_SOURCE=2")
 
 set(HOST_CXXFLAGS_GCC "${HOST_CFLAGS_GCC}")
 
@@ -80,7 +82,7 @@ if(USE_LIBSGX)
     set(SGX_LIBS "-lsgx_enclave_common -lsgx_dcap_ql -lsgx_urts")
 endif()
 
-set(HOST_CLIBS "-rdynamic -L\${libdir}/openenclave/host -loehost -ldl -lpthread ${SGX_LIBS}")
+set(HOST_CLIBS "-rdynamic -Wl,-z,noexecstack -L\${libdir}/openenclave/host -loehost -ldl -lpthread ${SGX_LIBS}")
 
 set(HOST_CXXLIBS "${HOST_CLIBS}")
 
