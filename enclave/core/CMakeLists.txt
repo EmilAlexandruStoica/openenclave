@@ -138,7 +138,9 @@ target_compile_options(oecore PUBLIC
 # Enclaves are linked using -pie and therefore global-dynamic is too conservative.
 # Of the two efficient static tls models, inital-exec and local-exec, we choose the most
 # optimal one.
-    -ftls-model=local-exec)
+    -ftls-model=local-exec
+    # Disable builtin functions for enclaves, but only in our build.
+    $<BUILD_INTERFACE:-fno-builtin-malloc -fno-builtin-calloc -fno-builtin>)
 
 target_compile_options(oecore INTERFACE $<$<COMPILE_LANGUAGE:CXX>:-nostdinc++>)
 
