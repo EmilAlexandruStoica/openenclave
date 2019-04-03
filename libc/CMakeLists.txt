@@ -535,6 +535,11 @@ add_library(oelibc STATIC
      ${MUSLSRC}/search/tfind.c
      ${MUSLSRC}/search/tsearch.c
      ${MUSLSRC}/search/twalk.c
+     ${MUSLSRC}/signal/block.c
+     ${MUSLSRC}/signal/signal.c
+     ${MUSLSRC}/signal/sigaction.c
+     ${MUSLSRC}/signal/sigignore.c
+     ${MUSLSRC}/signal/restore.c
      ${MUSLSRC}/stat/stat.c
      ${MUSLSRC}/stdio/asprintf.c
      ${MUSLSRC}/stdio/asprintf.c
