@@ -20,6 +20,7 @@ typedef enum _oe_hostsock_op
     OE_HOSTSOCK_OP_RECVMSG,
     OE_HOSTSOCK_OP_SENDMSG,
     OE_HOSTSOCK_OP_CLOSE,
+    OE_HOSTSOCK_OP_FCNTL,
     OE_HOSTSOCK_OP_DUP,
     OE_HOSTSOCK_OP_CONNECT,
     OE_HOSTSOCK_OP_ACCEPT,
@@ -134,6 +135,13 @@ typedef struct _oe_hostsock_args
             int64_t ret;
             int64_t host_fd;
         } close;
+        struct
+        {
+            int64_t ret;
+            int64_t host_fd;
+            int cmd;
+            int arg;
+        } fcntl;
         struct
         {
             int64_t ret;
