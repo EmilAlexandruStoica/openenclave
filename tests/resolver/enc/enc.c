@@ -99,21 +99,23 @@ int ecall_getaddrinfo(struct addrinfo** buffer)
 
     /* Allocate host memory and initialize the flat allocator. */
     {
+        struct oe_addrinfo* out = NULL;
         if (!(*buffer = oe_host_calloc(1, required_size)))
         {
             OE_TEST("oe_host_calloc() failed" == NULL);
         }
 
         oe_flat_allocator_init(&a, *buffer, required_size);
-    }
 
-    /* Copy the result from enclave to host memory. */
-    if (oe_deep_copy(
-            &__oe_addrinfo_structure, ai, *buffer, oe_flat_alloc, &a) != 0)
-    {
-        OE_TEST("oe_deep_copy() failed" == NULL);
-    }
+        out = oe_flat_alloc(sizeof(struct oe_addrinfo), &a);
 
+        /* Copy the result from enclave to host memory. */
+        if (oe_deep_copy(
+                &__oe_addrinfo_structure, ai, out, oe_flat_alloc, &a) != 0)
+        {
+            OE_TEST("oe_deep_copy() failed" == NULL);
+        }
+    }
     addrinfo_dump(*buffer);
 
     int n = addrinfo_compare((struct addrinfo*)ai, *buffer);

@@ -186,11 +186,12 @@ static ssize_t _hostresolv_getaddrinfo_r(
     /* Copy OCALL result to caller's buffer. */
     {
         oe_flat_allocator_t a;
+        struct oe_addrinfo* out = NULL;
 
         oe_flat_allocator_init(&a, res_out, required_size);
-
+        out = oe_flat_alloc(sizeof(struct oe_addrinfo), &a);
         if (oe_deep_copy(
-                &__oe_addrinfo_structure, res, res_out, oe_flat_alloc, &a) != 0)
+                &__oe_addrinfo_structure, res, out, oe_flat_alloc, &a) != 0)
         {
             oe_errno = EINVAL;
             goto done;
