@@ -230,7 +230,11 @@ oe_result_t oe_get_remote_report(
     /*
      * OCall: Get the quote for the local report.
      */
-    OE_CHECK(_oe_get_quote(&sgx_report, report_buffer, report_buffer_size));
+    result = _oe_get_quote(&sgx_report, report_buffer, report_buffer_size);
+    if (result == OE_BUFFER_TOO_SMALL)
+        OE_CHECK_NO_TRACE(result);
+    else
+        OE_CHECK(result);
 
     /*
      * Check that the entire report body in the returned quote matches the local
@@ -282,13 +286,18 @@ oe_result_t oe_get_report_v1(
 
     if (flags & OE_REPORT_FLAGS_REMOTE_ATTESTATION)
     {
-        OE_CHECK(oe_get_remote_report(
+        result = oe_get_remote_report(
             report_data,
             report_data_size,
             opt_params,
             opt_params_size,
             report_buffer,
-            report_buffer_size));
+            report_buffer_size);
+
+        if (result == OE_BUFFER_TOO_SMALL)
+            OE_CHECK_NO_TRACE(result);
+        else
+            OE_CHECK(result);
     }
     else
     {
