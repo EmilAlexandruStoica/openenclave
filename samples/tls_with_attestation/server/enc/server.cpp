@@ -11,17 +11,13 @@
 #include <mbedtls/platform.h>
 #include <mbedtls/rsa.h>
 #include <mbedtls/ssl.h>
-#include <mbedtls/ssl_cache.h> // Enable simple SSL cache implementation (MBEDTLS_SSL_CACHE_C)
+#include <mbedtls/ssl_cache.h>
 #include <mbedtls/x509.h>
 #include <openenclave/enclave.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/socket.h>
 #include "../../common/utility.h"
-
-// TODO:
-// Need to fix this path openenclave\include\openenclave\internal\resolver.h
-//#include "resolver.h"
 
 oe_result_t enclave_identity_verifier_callback(
     oe_identity_t* identity,
@@ -94,7 +90,6 @@ static int cert_verify_callback(
         goto exit;
     }
     ret = 0;
-
 exit:
     return ret;
 }
@@ -153,20 +148,10 @@ int configure_server_ssl(
         printf("failed\n  ! mbedtls_ssl_setup returned %d\n\n", ret);
         goto exit;
     }
-
     ret = 0;
-
 exit:
     fflush(stdout);
     return ret;
-}
-
-int setup_socket_lib()
-{
-    oe_enable_feature(OE_FEATURE_HOST_RESOLVER);
-    oe_enable_feature(OE_FEATURE_HOST_SOCKETS);
-    //    oe_set_default_socket_devid(OE_DEVID_HOST_SOCKET);
-    return 0;
 }
 
 int setup_tls_server(char* server_port)
@@ -185,7 +170,9 @@ int setup_tls_server(char* server_port)
     unsigned char buf[1024];
     const char* pers = "tls_server";
 
-    setup_socket_lib();
+    // Explicitly enabling features
+    oe_enable_feature(OE_FEATURE_HOST_RESOLVER);
+    oe_enable_feature(OE_FEATURE_HOST_SOCKETS);
 
     // init mbedtls objects
     mbedtls_net_init(&listen_fd);
@@ -367,7 +354,7 @@ waiting_for_connection_request:
     }
 
     ret = 0;
-    goto waiting_for_connection_request;
+    // goto waiting_for_connection_request;
 exit:
 
     if (ret != 0)

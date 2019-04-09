@@ -1,22 +1,11 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+// clang-format off
 #include <openenclave/enclave.h>
-
-// #include <mbedtls/pk.h>
-// #include <mbedtls/rsa.h>
-// #include <mbedtls/entropy.h>
-// #include <mbedtls/ctr_drbg.h>
-//#include <mbedtls/certs.h>
-//#include <mbedtls/x509.h>
-
-// #include <mbedtls/pk.h>
-// #include <mbedtls/rsa.h>
-// #include <mbedtls/sha256.h>
-// #include <mbedtls/x509_crt.h>
-
 #include <stdio.h>
 #include "utility.h"
+// clang-format on
 
 // input: input_data and input_data_len
 // output: key, key_size

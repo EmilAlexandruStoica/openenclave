@@ -4,11 +4,6 @@
 #include <openenclave/enclave.h>
 #include <stdlib.h>
 #include <string>
-
-// #include <mbedtls/pk.h>
-// #include <mbedtls/rsa.h>
-// #include <mbedtls/sha256.h>
-
 #include "../../common/tls_client_enc_pubkey.h"
 #include "../../common/utility.h"
 

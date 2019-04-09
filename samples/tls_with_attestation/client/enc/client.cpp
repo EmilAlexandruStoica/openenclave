@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+#include <errno.h>
 #include <mbedtls/certs.h>
 #include <mbedtls/ctr_drbg.h>
 #include <mbedtls/debug.h>
@@ -10,7 +11,6 @@
 #include <mbedtls/platform.h>
 #include <mbedtls/ssl.h>
 #include <openenclave/enclave.h>
-
 #include <string.h>
 #include "../../common/utility.h"
 
@@ -18,6 +18,7 @@ extern "C"
 {
     int launch_tls_client(char* server_name, char* server_port);
 };
+
 oe_result_t enclave_identity_verifier_callback(
     oe_identity_t* identity,
     void* arg);
@@ -116,23 +117,12 @@ int configure_client_ssl(
 
     // set up random engine
     mbedtls_ssl_conf_rng(conf, mbedtls_ctr_drbg_random, ctr_drbg);
+
     // set debug function
     mbedtls_ssl_conf_dbg(conf, my_debug, stdout);
 
-    // Set the certificate verification mode Default: NONE on server, REQUIRED
-    // on client. MBEDTLS_SSL_VERIFY_NONE: peer certificate is not checked
-    // (default on server) (insecure on client) MBEDTLS_SSL_VERIFY_OPTIONAL:
-    // peer certificate is checked, however the handshake continues
-    //                              even if verification failed;
-    //                              mbedtls_ssl_get_verify_result() can be
-    //                              called after the handshake is complete.
-    // MBEDTLS_SSL_VERIFY_REQUIRED: peer must present a valid certificate,
-    // handshake is aborted if
-    //                              verification failed. (default on client)
-
+    // Set the certificate verification mode to MBEDTLS_SSL_VERIFY_OPTIONAL
     mbedtls_ssl_conf_authmode(conf, MBEDTLS_SSL_VERIFY_OPTIONAL);
-    // mbedtls_ssl_conf_authmode(conf, MBEDTLS_SSL_VERIFY_NONE);
-
     mbedtls_ssl_conf_verify(conf, cert_verify_callback, NULL);
 
     // enable TLS server to send a list of acceptable CAs in CertificateRequest
@@ -184,14 +174,6 @@ exit:
     return ret;
 }
 
-int setup_socket_lib()
-{
-    oe_enable_feature(OE_FEATURE_HOST_RESOLVER);
-    oe_enable_feature(OE_FEATURE_HOST_SOCKETS);
-    //    oe_set_default_socket_devid(OE_DEVID_HOST_SOCKET);
-    return 0;
-}
-
 int launch_tls_client(char* server_name, char* server_port)
 {
     int ret = 1;
@@ -200,6 +182,7 @@ int launch_tls_client(char* server_name, char* server_port)
     uint32_t flags;
     unsigned char buf[1024];
     const char* pers = "ssl_client";
+
     mbedtls_net_context server_fd;
     mbedtls_entropy_context entropy;
     mbedtls_ctr_drbg_context ctr_drbg;
@@ -208,16 +191,16 @@ int launch_tls_client(char* server_name, char* server_port)
     mbedtls_x509_crt client_cert;
     mbedtls_pk_context pkey;
 
-    setup_socket_lib();
+    // Explicitly enabling features
+    oe_enable_feature(OE_FEATURE_HOST_RESOLVER);
+    oe_enable_feature(OE_FEATURE_HOST_SOCKETS);
 
+    // Initialize mbedtls objects
     mbedtls_debug_set_threshold(DEBUG_LEVEL);
-
-    // Initialize the RNG and the session data
     mbedtls_net_init(&server_fd);
     mbedtls_ssl_init(&ssl);
     mbedtls_ssl_config_init(&conf);
     mbedtls_ctr_drbg_init(&ctr_drbg);
-
     mbedtls_x509_crt_init(&client_cert);
     mbedtls_pk_init(&pkey);
 
@@ -250,11 +233,16 @@ int launch_tls_client(char* server_name, char* server_port)
     //
     // Start the connection
     //
-    printf("Connecting to tcp/%s/%s...\n", server_name, server_port);
+    printf("Connecting to tcp: %s/%s...\n", server_name, server_port);
+
     if ((ret = mbedtls_net_connect(
              &server_fd, server_name, server_port, MBEDTLS_NET_PROTO_TCP)) != 0)
     {
-        printf("Failed\n  ! mbedtls_net_connect returned %d\n", ret);
+        printf(
+            "Failed\n  ! mbedtls_net_connect returned %d errno=%d\n",
+            ret,
+            errno);
+        exit_code = ret;
         goto exit;
     }
 
@@ -302,7 +290,6 @@ int launch_tls_client(char* server_name, char* server_port)
 
     // Write an GET request to the server
     printf("Write to server-->:");
-
     len = sprintf((char*)buf, GET_REQUEST);
     while ((ret = mbedtls_ssl_write(&ssl, buf, len)) <= 0)
     {
@@ -317,14 +304,13 @@ int launch_tls_client(char* server_name, char* server_port)
     len = ret;
     printf("%d bytes written\n%s", len, (char*)buf);
 
-    // Read the HTTP response from server
+    printf("Read the HTTP response from server:\n");
     printf("<-- Read from server:\n");
     do
     {
         len = sizeof(buf) - 1;
         memset(buf, 0, sizeof(buf));
         ret = mbedtls_ssl_read(&ssl, buf, len);
-
         if (ret == MBEDTLS_ERR_SSL_WANT_READ ||
             ret == MBEDTLS_ERR_SSL_WANT_WRITE)
             continue;
@@ -362,11 +348,8 @@ int launch_tls_client(char* server_name, char* server_port)
     } while (1);
 
     mbedtls_ssl_close_notify(&ssl);
-
     exit_code = MBEDTLS_EXIT_SUCCESS;
-
 exit:
-
     if (exit_code != MBEDTLS_EXIT_SUCCESS)
     {
         char error_buf[100];
@@ -376,14 +359,11 @@ exit:
 
     mbedtls_net_free(&server_fd);
 
-    // free certificate resource
+    // free mbedtls objects
     mbedtls_x509_crt_free(&client_cert);
     mbedtls_pk_free(&pkey);
-
     mbedtls_ssl_free(&ssl);
     mbedtls_ssl_config_free(&conf);
-
-    // free ssl resource
     mbedtls_ctr_drbg_free(&ctr_drbg);
     mbedtls_entropy_free(&entropy);
 

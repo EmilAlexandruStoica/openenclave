@@ -1,12 +1,11 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
+
 #include <openenclave/enclave.h>
-// #include "../common/dispatcher.h"
 #include "../../common/tls_server_enc_pubkey.h"
 #include "tls_server_t.h"
 
-// enclave.h must come before socket.h
-#include <sys/socket.h> // needed fo tls
+#include <sys/socket.h>
 
 typedef struct _enclave_config_data
 {
@@ -41,41 +40,3 @@ enclave_config_data_t config_data = {g_enclave_secret_data,
 // for better organizing enclave-wise global variables
 // static ecall_dispatcher dispatcher("Enclave1", &config_data);
 const char* enclave_name = "Enclave1";
-/**
- * Return the public key of this enclave along with the enclave's remote report.
- * Another enclave can use the remote report to attest the enclave and verify
- * the integrity of the public key.
- */
-// int get_remote_report_with_pubkey(
-//     uint8_t** pem_key,
-//     size_t* key_size,
-//     uint8_t** remote_report,
-//     size_t* remote_report_size)
-// {
-//     TRACE_ENCLAVE("enter get_remote_report_with_pubkey");
-//     return dispatcher.get_remote_report_with_pubkey(
-//         pem_key, key_size, remote_report, remote_report_size);
-// }
-
-// // Attest and store the public key of another enclave.
-// int verify_report_and_set_pubkey(
-//     uint8_t* pem_key,
-//     size_t key_size,
-//     uint8_t* remote_report,
-//     size_t remote_report_size)
-// {
-//     return dispatcher.verify_report_and_set_pubkey(
-//         pem_key, key_size, remote_report, remote_report_size);
-// }
-
-// // Encrypt message for another enclave using the public key stored for it.
-// int generate_encrypted_message(uint8_t** data, size_t* size)
-// {
-//     return dispatcher.generate_encrypted_message(data, size);
-// }
-
-// // Process encrypted message
-// int process_encrypted_msg(uint8_t* data, size_t size)
-// {
-//     return dispatcher.process_encrypted_msg(data, size);
-// }

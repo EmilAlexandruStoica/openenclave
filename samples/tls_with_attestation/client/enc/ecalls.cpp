@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
+
 #include <openenclave/enclave.h>
 #include "../../common/tls_client_enc_pubkey.h"
 #include "tls_client_t.h"

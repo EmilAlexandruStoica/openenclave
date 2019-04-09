@@ -105,17 +105,13 @@ int main(int argc, const char* argv[])
     }
 
     printf("Host: llaunch TLS client to initiate TLS connection\n");
-    //    ret = launch_tls_client(enclave, &ret, (char*)TLS_SERVER_NAME,
-    //    (char*)TLS_SERVER_PORT);
     ret = launch_tls_client(enclave, &ret, server_name, server_port);
     if (ret != 0)
     {
         printf("Host: launch_tls_client failed\n");
         goto exit;
     }
-
     ret = 0;
-
 exit:
 
     if (enclave)

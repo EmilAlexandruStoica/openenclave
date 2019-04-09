@@ -6,8 +6,4 @@ enclave {
 
         public int launch_tls_client([in, string] char* server_name, [in, string] char* server_port);
     };
-
-    //untrusted {
-    //    no untrusted functions in this sample
-    //};
 };

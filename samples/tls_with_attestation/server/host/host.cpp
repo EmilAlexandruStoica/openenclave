@@ -5,8 +5,6 @@
 #include <stdio.h>
 #include "tls_server_u.h"
 
-//#define SERVER_PORT "12340"
-
 oe_enclave_t* create_enclave(const char* enclave_path)
 {
     oe_enclave_t* enclave = NULL;
@@ -61,7 +59,6 @@ int main(int argc, const char* argv[])
         param_len = strlen(option);
         if (strncmp(argv[2], option, param_len) == 0)
         {
-            // sscanf(argv[2] + param_len, "%d", &port);
             server_port = (char*)(argv[2] + param_len);
         }
         else

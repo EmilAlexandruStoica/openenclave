@@ -7,7 +7,7 @@
 #include <openenclave/enclave.h>
 #include <stdlib.h>
 #include <string.h>
-//#include <mbedtls/net_sockets.h>
+
 Crypto::Crypto()
 {
     m_initialized = init_mbedtls();

@@ -2,14 +2,8 @@
 // Licensed under the MIT License.
 
 enclave {
-
    trusted {
-
         public int setup_tls_server([in, string] char* port);
 
     };
-
-    //untrusted {
-    //    no untrusted functions in this sample
-    //};
 };
