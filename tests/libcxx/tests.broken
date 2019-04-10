@@ -1,3 +1,11 @@
 # Add broken files here
-# Following test segfaults after upgrade to libcxx 7.0 and merge to libcxx to use larger heap page count of 12K
-../../3rdparty/libcxx/libcxx/test/std/thread/futures/futures.unique_future/get.pass.cpp
+# Broken in libcxx 8.0.0 for Ubuntu 1804 using gcc compiler and CMAKE_BUILD_TYPE=Debug
+../../3rdparty/libcxx/libcxx/test/libcxx/algorithms/half_positive.pass.cpp
+# Broken with gcc - error: static assertion failed: static_assert((std::is_same<decltype(wcschr((const wchar_t*)0, L' ')), const wchar_t*>::value), "")
+../../3rdparty/libcxx/libcxx/test/std/depr/depr.c.headers/wchar_h.pass.cpp
+# Broken with gcc - error: static assertion failed: static_assert((std::is_same<decltype(strchr(cpc, 0)), const char*>::value), "")`
+../../3rdparty/libcxx/libcxx/test/std/depr/depr.c.headers/string_h.pass.cpp
+# Broken with gcc - error: non-constant condition for static assertion static_assert(std::__libcpp_isnan_or_builtin(0.) == false, "")
+../../3rdparty/libcxx/libcxx/test/libcxx/numerics/c.math/constexpr-fns.pass.cpp
+# Fails with "Child aborted" on Ubuntu 18.04 with gcc, RelWithDebug and Release
+../../3rdparty/libcxx/libcxx/test/std/containers/associative/map/map.access/at.pass.cpp
