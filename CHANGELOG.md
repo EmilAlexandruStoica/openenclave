@@ -66,7 +66,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `ocall_table_size`.
 - Update mbedTLS library to version 2.7.9.
 - Update MUSL libc to version 1.1.20.
-- Update LLVM libcxx to version 7.0.0.
+- Update LLVM libcxx to version 8.0.0.
    - Some libcxx headers (e.g. `<string>`) now use C++11 template features and
      may require compiling with the `-std=c++11` option when building with GCC.
 - Update minimum required CMake version for building from source to 3.13.1.
