@@ -47,8 +47,8 @@ def azureEnvironment(String task) {
 }
 
 def Run(String compiler, String task, Integer timeoutMinutes = 30) {
-    def c_compiler = "clang-7"
-    def cpp_compiler = "clang++-7"
+    def c_compiler = "clang-8"
+    def cpp_compiler = "clang++-8"
     if (compiler == "gcc") {
         c_compiler = "gcc"
         cpp_compiler = "g++"
