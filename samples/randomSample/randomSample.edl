@@ -1,0 +1,9 @@
+enclave {
+    trusted {
+        public int enclave_randomSample();
+    };
+
+    untrusted {
+        int host_randomSample();
+    };
+};
