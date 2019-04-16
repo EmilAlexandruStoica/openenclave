@@ -35,7 +35,7 @@ validation_binaries:
   - "/usr/bin/ocaml"
   - "/usr/bin/openssl"
   - "/usr/bin/pkg-config"
-  - "/usr/bin/clang-7"
+  - "/usr/bin/clang-8"
   - "/usr/bin/shellcheck"
   - "/usr/bin/git"
   - "/usr/bin/svn"
