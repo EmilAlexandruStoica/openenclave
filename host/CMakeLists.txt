@@ -109,22 +109,12 @@ add_library(oehost STATIC
 
 target_link_libraries(oehost PUBLIC oe_includes)
 
-# TODO: Replace these with `find_package` and add as dependencies to
-# the CMake package.
-if (UNIX)
-  find_library(CRYPTO_LIB NAMES crypto)
-  add_library(crypto SHARED IMPORTED)
-  set_target_properties(crypto PROPERTIES IMPORTED_LOCATION ${CRYPTO_LIB})
-
-  find_library(DL_LIB NAMES dl)
-  add_library(dl SHARED IMPORTED)
-  set_target_properties(dl PROPERTIES IMPORTED_LOCATION ${DL_LIB})
-endif ()
-
+find_package(CryptoPP REQUIRED)
+find_package(dlib REQUIRED)
 find_package(Threads REQUIRED)
 
 if (UNIX)
-  target_link_libraries(oehost PRIVATE crypto dl Threads::Threads)
+  target_link_libraries(oehost PRIVATE CryptoPP::CryptoPP dlib::dlib Threads::Threads)
 elseif (WIN32)
   target_include_directories(oehost PRIVATE
     ${CMAKE_SOURCE_DIR}/3rdparty/mbedtls/mbedtls/include)
@@ -171,12 +161,9 @@ if (USE_DEBUG_MALLOC)
 endif ()
 
 if (UNIX)
-  target_compile_options(oehost
-     PRIVATE -Wno-attributes -Wmissing-prototypes -fPIC ${PLATFORM_FLAGS}
-     PUBLIC -fstack-protector-strong)
-  target_compile_definitions(oehost
-     PRIVATE _GNU_SOURCE
-     PUBLIC _FORTIFY_SOURCE=2)
+  target_compile_options(oehost PRIVATE
+    -Wno-attributes -Wmissing-prototypes -fPIC ${PLATFORM_FLAGS})
+  target_compile_definitions(oehost PRIVATE _GNU_SOURCE)
 endif ()
 
 if (CMAKE_C_COMPILER_ID MATCHES GNU)
@@ -194,9 +181,7 @@ add_library(oehostapp INTERFACE)
 target_link_libraries(oehostapp INTERFACE oehost)
 
 if (UNIX)
-  target_link_libraries(oehostapp INTERFACE
-      -rdynamic
-      -Wl,-z,noexecstack)
+  target_link_libraries(oehostapp INTERFACE -rdynamic)
 endif ()
 
 # Install targets

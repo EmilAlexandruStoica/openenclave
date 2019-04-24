@@ -32,11 +32,9 @@ The remaining targets in `openenclave-targets.cmake` are automatically included
 when needed by the above.
 
 The package will also search for (and requires) the
-[`Threads` package](https://cmake.org/cmake/help/latest/module/FindThreads.html).
-
-However, the libraries `crypto` and `dl` will also need to be available on the
-system, but due to an outstanding issue, the failure will happen at link-time if
-they are unavailable.
+[`Threads` package](https://cmake.org/cmake/help/latest/module/FindThreads.html),
+[`CryptoPP` package](https://www.cryptopp.com) and 
+[`dlib` package](http://dlib.net).
 
 Examples
 --------
