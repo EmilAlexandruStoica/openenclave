@@ -109,12 +109,21 @@ add_library(oehost STATIC
 
 target_link_libraries(oehost PUBLIC oe_includes)
 
-find_package(CryptoPP REQUIRED)
+if (UNIX)
+  find_library(CRYPTO_LIB NAMES crypto)
+  add_library(crypto SHARED IMPORTED)
+  set_target_properties(crypto PROPERTIES IMPORTED_LOCATION ${CRYPTO_LIB})
+endif ()
+
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/3rdparty/dlib")
 find_package(dlib REQUIRED)
+include_directories(${dlib_INCLUDE_DIRS})
+link_directories(${DLIB_LIBRARY_DIRS})
+
 find_package(Threads REQUIRED)
 
 if (UNIX)
-  target_link_libraries(oehost PRIVATE CryptoPP::CryptoPP dlib::dlib Threads::Threads)
+  target_link_libraries(oehost PRIVATE crypto dlib::dlib Threads::Threads)
 elseif (WIN32)
   target_include_directories(oehost PRIVATE
     ${CMAKE_SOURCE_DIR}/3rdparty/mbedtls/mbedtls/include)

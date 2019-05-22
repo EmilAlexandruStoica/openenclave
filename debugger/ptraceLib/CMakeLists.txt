@@ -3,6 +3,8 @@
 
 find_package(Threads REQUIRED)
 find_package(dlib REQUIRED)
+include_directories(${dlib_INCLUDE_DIRS})
+link_directories(${DLIB_LIBRARY_DIRS})
 
 add_library(oe_ptrace SHARED
   oe_ptrace.c
