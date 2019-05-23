@@ -2,9 +2,9 @@
 # Licensed under the MIT License.
 
 find_package(Threads REQUIRED)
+
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/3rdparty/dlib")
 find_package(dlib REQUIRED)
-include_directories(${dlib_INCLUDE_DIRS})
-link_directories(${DLIB_LIBRARY_DIRS})
 
 add_library(oe_ptrace SHARED
   oe_ptrace.c
