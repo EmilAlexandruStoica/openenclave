@@ -8,6 +8,7 @@
 #include <openenclave/internal/calls.h>
 #include <openenclave/internal/raise.h>
 #include <openenclave/internal/syscall.h>
+#include <openenclave/internal/syscall/sys/syscall.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -85,7 +86,9 @@ static oe_result_t _syscall_hook(
 
     if (!ret)
         OE_RAISE(OE_INVALID_PARAMETER);
-
+    
+    *ret = oe_syscall(OE_SYS_open, arg1, arg2, arg3, arg4, arg5, arg6);
+    /*
     switch (number)
     {
         case SYS_open:
@@ -98,6 +101,7 @@ static oe_result_t _syscall_hook(
                     mbed_test_open(&rval, (char*)arg1, (int)arg2, (mode_t)arg3);
                 *ret = rval;
             }
+            *ret = oe_syscall(OE_SYS_open, arg1, arg2, arg3, arg4, arg5, arg6);
             break;
         }
         case SYS_read:
@@ -151,7 +155,7 @@ static oe_result_t _syscall_hook(
         {
             OE_RAISE(OE_UNSUPPORTED);
         }
-    }
+    }*/
 
 done:
     return result;
