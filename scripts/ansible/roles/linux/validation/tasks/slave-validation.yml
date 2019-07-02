@@ -2,9 +2,9 @@
 # Licensed under the MIT License.
 
 ---
-- name: Include distribution vars
+- name: Include vars
   include_vars:
-    file: "{{ ansible_distribution | lower }}.yml"
+    file: "{{ ansible_distribution_release | lower }}.yml"
 
 - name: Check for existing required binaries
   stat:
@@ -32,14 +32,24 @@
   register: cmake_check_version
   failed_when: cmake_check_version.stdout.find(cmake_target_version) == -1
 
+- name: Docker version check
+  command: "docker --version"
+  register: docker_check_version
+  failed_when: docker_check_version.stdout.find(docker_target_version) == -1
+
+- name: Dockerd version check
+  command: "dockerd --version"
+  register: dockerd_check_version
+  failed_when: dockerd_check_version.stdout.find(dockerd_target_version) == -1
+
 - name: Clang version check
   command: "clang-8 --version"
   register: clang_check_version
   failed_when: clang_check_version.stdout.find(clang_target_version) == -1
 
 - name: Ocaml version check
-  shell: "ocaml -version"
+  shell: "source /etc/profile && ocaml -version"
   args:
     executable: /bin/bash
   register: ocaml_check_version
-  failed_when: ocaml_check_version.stdout.find(ocaml_version) == -1
+  failed_when: ocaml_check_version.stdout.find(ocaml_target_version) == -1
