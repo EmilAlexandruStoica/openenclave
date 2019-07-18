@@ -123,6 +123,7 @@ add_library(mbedcrypto_static STATIC
 add_library(mbedx509 STATIC
   mbedtls/library/certs.c
   mbedtls/library/pkcs11.c
+  mbedtls/library/platform_util.c
   mbedtls/library/x509.c
   mbedtls/library/x509_create.c
   mbedtls/library/x509_crl.c
@@ -133,6 +134,7 @@ add_library(mbedx509 STATIC
 
 add_library(mbedtls STATIC
   mbedtls/library/debug.c
+  mbedtls/library/platform_util.c
   mbedtls/library/net_sockets.c
   mbedtls/library/ssl_cache.c
   mbedtls/library/ssl_ciphersuites.c
