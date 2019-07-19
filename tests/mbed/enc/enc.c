@@ -8,12 +8,13 @@
 #include <openenclave/internal/calls.h>
 #include <openenclave/internal/raise.h>
 #include <openenclave/internal/syscall.h>
+#include <openenclave/internal/syscall/sys/syscall.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/syscall.h>
-#include <sys/uio.h>
+//#include <sys/syscall.h>
+//#include <sys/uio.h>
 #include <unistd.h>
 #include "mbed_t.h"
 
@@ -85,10 +86,12 @@ static oe_result_t _syscall_hook(
 
     if (!ret)
         OE_RAISE(OE_INVALID_PARAMETER);
-
+	
+	oe_syscall(number, arg1, arg2, arg3, arg4, arg5, arg6);
+	/*
     switch (number)
     {
-        case SYS_open:
+        case OE_SYS_open:
         {
             const int flags = (const int)arg2;
             if (flags == O_RDONLY)
@@ -98,9 +101,11 @@ static oe_result_t _syscall_hook(
                     mbed_test_open(&rval, (char*)arg1, (int)arg2, (mode_t)arg3);
                 *ret = rval;
             }
+			
+			oe_syscall(number, arg1, arg2, arg3, arg4, arg5, arg6);
             break;
         }
-        case SYS_read:
+        case OE_SYS_read:
         {
             ssize_t rval = 0;
             const size_t buf_len = (size_t)arg3;
@@ -113,9 +118,10 @@ static oe_result_t _syscall_hook(
             }
             *ret = (int)rval;
             oe_host_free(host_buf);
+			oe_syscall(number, arg1, arg2, arg3, arg4, arg5, arg6);
             break;
         }
-        case SYS_writev:
+        case OE_SYS_writev:
         {
             char* str_full;
             size_t total_buff_len = 0;
@@ -138,21 +144,24 @@ static oe_result_t _syscall_hook(
             // expecting the runtime implementation of SYS_writev to also be
             // called.
             result = OE_UNSUPPORTED;
+			oe_syscall(number, arg1, arg2, arg3, arg4, arg5, arg6);
             break;
         }
-        case SYS_close:
+        case OE_SYS_close:
         {
             int rval = 0;
             result = mbed_test_close(&rval, (int)arg1);
+			oe_syscall(number, arg1, arg2, arg3, arg4, arg5, arg6);
             break;
         }
-        case SYS_readv:
+        case OE_SYS_readv:
         default:
         {
             OE_RAISE(OE_UNSUPPORTED);
         }
+		
     }
-
+	*/
 done:
     return result;
 }
