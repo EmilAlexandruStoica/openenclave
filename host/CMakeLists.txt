@@ -66,6 +66,7 @@ if (UNIX)
     linux/windows.c)
 elseif (WIN32)
   set(PLATFORM_SRC
+    ../3rdparty/mbedtls/mbedtls/library/platform_util.c
     ../3rdparty/mbedtls/mbedtls/library/bignum.c
     crypto/bcrypt/hmac.c
     crypto/bcrypt/random.c
