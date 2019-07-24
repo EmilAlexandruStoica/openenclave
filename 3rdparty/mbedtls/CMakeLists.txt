@@ -118,7 +118,25 @@ add_library(mbedcrypto_static STATIC
   # Since we define mbedtls to use an alternate entropy source, it uses an
   # undefined mebdtls_hardware_poll function. We define it to avoid
   # circular library dependecies.
-  mbedtls_hardware_poll.c)
+  mbedtls_hardware_poll.c
+  mbedtls/library/certs.c
+  mbedtls/library/pkcs11.c
+  mbedtls/library/x509.c
+  mbedtls/library/x509_create.c
+  mbedtls/library/x509_crl.c
+  mbedtls/library/x509_crt.c
+  mbedtls/library/x509_csr.c
+  mbedtls/library/x509write_crt.c
+  mbedtls/library/x509write_csr.c
+  mbedtls/library/debug.c
+  mbedtls/library/net_sockets.c
+  mbedtls/library/ssl_cache.c
+  mbedtls/library/ssl_ciphersuites.c
+  mbedtls/library/ssl_cli.c
+  mbedtls/library/ssl_cookie.c
+  mbedtls/library/ssl_srv.c
+  mbedtls/library/ssl_ticket.c
+  mbedtls/library/ssl_tls.c)
 
 add_library(mbedx509 STATIC
   mbedtls/library/certs.c
