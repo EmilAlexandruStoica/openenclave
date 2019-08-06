@@ -74,4 +74,8 @@ parallel "ACC1604 clang-7 RelWithDebInfo" :                     { ACCTest(UBUNTU
          "ACC1604 Container RelWithDebInfo" :                   { ACCContainerTest(UBUNTU_1604_CUSTOM_LABEL, '16.04') },
          "ACC1804 clang-7 RelWithDebInfo" :                     { ACCTest(UBUNTU_1804_CUSTOM_LABEL, 'clang-7', 'RelWithDebInfo') },
          "ACC1804 gcc RelWithDebInfo" :                         { ACCTest(UBUNTU_1804_CUSTOM_LABEL, 'gcc', 'RelWithDebInfo') },
-         "ACC1804 Container RelWithDebInfo" :                   { ACCContainerTest(UBUNTU_1804_CUSTOM_LABEL, '18.04') }
+         "ACC1804 Container RelWithDebInfo" :                   { ACCContainerTest(UBUNTU_1804_CUSTOM_LABEL, '18.04') },
+         "Win2016 Ubuntu1604 clang-7 Debug Linux-Elf-build" :   { win2016LinuxElfBuild('16.04', 'clang-7', 'Debug') },
+         "Win2016 Ubuntu1804 clang-7 Release Linux-Elf-build" : { win2016LinuxElfBuild('18.04', 'clang-7', 'Release') },
+         "Win2016 Ubuntu1804 gcc Debug Linux-Elf-build" :       { win2016LinuxElfBuild('18.04', 'gcc', 'Debug') },
+         "Win2016 Debug Cross Compile" :                        { win2016CrossCompile('Debug') }
