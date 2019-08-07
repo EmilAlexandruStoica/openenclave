@@ -7,6 +7,7 @@
         "vmSize": "Standard_DC2s",
         "ports": [3389, 5986],
         "isVanilla": true,
+        "enableWinRM": true,
         "hasDNSName": true
       }
     ],
