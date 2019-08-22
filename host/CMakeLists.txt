@@ -240,14 +240,14 @@ endif()
 # TODO: Replace these with `find_package` and add as dependencies to
 # the CMake package.
 if (UNIX)
-  if (NOT TARGET crypto)
+  if (NOT TARGET openenclave::crypto)
     find_library(CRYPTO_LIB NAMES crypto)
     if (NOT CRYPTO_LIB)
       message(FATAL_ERROR "-- Looking for crypto library - not found")
     else ()
       message("-- Looking for crypto library - found")
-      add_library(crypto SHARED IMPORTED)
-      set_target_properties(crypto PROPERTIES IMPORTED_LOCATION ${CRYPTO_LIB})
+      add_library(openenclave::crypto SHARED IMPORTED)
+      set_target_properties(openenclave::crypto PROPERTIES IMPORTED_LOCATION ${CRYPTO_LIB})
     endif ()
   endif ()
 
