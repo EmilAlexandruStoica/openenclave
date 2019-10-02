@@ -6,3 +6,9 @@
 	path = 3rdparty/optee/optee_client
 	url = https://github.com/ms-iot/optee_client
 	branch = ms-iot-openenclave
+[submodule "3rdparty/mbedtls/mbedtls"]
+	path = 3rdparty/mbedtls/mbedtls
+	url = https://github.com/EmilAlexandruStoica/mbedtls.git
+[submodule "3rdparty/libcxx/libcxx"]
+	path = 3rdparty/libcxx/libcxx
+	url = https://github.com/EmilAlexandruStoica/libcxx.git
